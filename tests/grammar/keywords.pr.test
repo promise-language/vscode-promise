@@ -1,0 +1,62 @@
+// SYNTAX TEST "source.promise"
+
+// --- Use declarations ---
+use std;
+// <-- keyword.control.import.promise
+//  ^^^ entity.name.module.promise
+
+use io "https://example.com/io";
+// <-- keyword.control.import.promise
+//  ^^ entity.name.module.promise
+//     ^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.promise
+
+use math as m;
+// <-- keyword.control.import.promise
+//  ^^^^ entity.name.module.promise
+//       ^^ keyword.other.as.promise
+//          ^ entity.name.module.promise
+
+// --- Control flow inside a function ---
+test_keywords() {
+  if true {
+//^^ keyword.control.promise
+//   ^^^^ constant.language.boolean.promise
+  }
+  for i in items {
+//^^^ keyword.control.promise
+//      ^^ keyword.other.promise
+  }
+  while true {
+//^^^^^ keyword.control.promise
+  }
+  match x {
+//^^^^^ keyword.control.promise
+    _ => 0,
+  }
+  return 42;
+//^^^^^^ keyword.control.promise
+  break;
+//^^^^^ keyword.control.promise
+  continue;
+//^^^^^^^^ keyword.control.promise
+  yield val;
+//^^^^^ keyword.control.promise
+  raise err;
+//^^^^^ keyword.control.error.promise
+
+// --- Concurrency ---
+  go {
+//^^ keyword.control.concurrency.promise
+  };
+  select {
+//^^^^^^ keyword.control.concurrency.promise
+  }
+
+// --- Contextual keywords ---
+  x present;
+//  ^^^^^^^ constant.language.promise
+  x absent;
+//  ^^^^^^ constant.language.promise
+  default:
+//^^^^^^^ keyword.control.default.promise
+}

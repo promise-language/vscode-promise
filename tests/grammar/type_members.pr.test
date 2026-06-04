@@ -1,0 +1,100 @@
+// SYNTAX TEST "source.promise"
+
+type Counter {
+// <-- keyword.declaration.type.promise
+//   ^^^^^^^ entity.name.type.promise
+
+  int count;
+//^^^ support.type.primitive.promise
+//    ^^^^^ variable.other.field.promise
+
+  bool? enabled `value;
+//^^^^ support.type.primitive.promise
+//    ^ keyword.operator.optional.promise
+//      ^^^^^^^ variable.other.field.promise
+//              ^ punctuation.definition.annotation.promise
+//               ^^^^^ entity.name.decorator.promise
+
+  Node? next;
+//^^^^ entity.name.type.promise
+//    ^ keyword.operator.optional.promise
+//      ^^^^ variable.other.field.promise
+
+  new(int initial) {
+//^^^ entity.name.function.constructor.promise
+    this.count = initial;
+//  ^^^^ variable.language.this.promise
+  }
+
+  increment(~this) {
+//^^^^^^^^^ entity.name.function.method.promise
+  }
+
+  get value int {
+//^^^ keyword.other.property.promise
+//    ^^^^^ entity.name.function.getter.promise
+    return this.count;
+  }
+
+  get is_zero bool => this.count == 0;
+//^^^ keyword.other.property.promise
+//    ^^^^^^^ entity.name.function.getter.promise
+//                 ^^ punctuation.arrow.promise
+
+  set value(int v) {
+//^^^ keyword.other.property.promise
+//    ^^^^^ entity.name.function.setter.promise
+  }
+
+  get amount! int {
+//^^^ keyword.other.property.promise
+//    ^^^^^^ entity.name.function.getter.promise
+//          ^ keyword.operator.failable.promise
+//            ^^^ support.type.primitive.promise
+    return this.count;
+  }
+
+  set amount!(int v) {
+//^^^ keyword.other.property.promise
+//    ^^^^^^ entity.name.function.setter.promise
+//          ^ keyword.operator.failable.promise
+//           ^ punctuation.definition.parameters.begin.promise
+  }
+
+  to_string(&this) string `public => "{this.count}";
+//^^^^^^^^^ entity.name.function.method.promise
+//                        ^ punctuation.definition.annotation.promise
+//                         ^^^^^^ entity.name.decorator.promise
+//                                ^^ punctuation.arrow.promise
+
+  send!(~this) Response {
+//^^^^ entity.name.function.method.promise
+//    ^ keyword.operator.failable.promise
+//     ^ punctuation.definition.parameters.begin.promise
+//      ^ keyword.operator.borrow.promise
+//       ^^^^ variable.language.this.promise
+//           ^ punctuation.definition.parameters.end.promise
+//             ^^^^^^^^ entity.name.type.promise
+  }
+
+  new!(int x) {
+//^^^ entity.name.function.constructor.promise
+//   ^ keyword.operator.failable.promise
+  }
+}
+
+// --- Operator methods ---
+type Point {
+  f64 x;
+  f64 y;
+
+  +(Point other) Point {
+//^ entity.name.function.operator.promise
+    return Point(x: this.x + other.x, y: this.y + other.y);
+  }
+
+  ==(Point other) bool {
+//^^ entity.name.function.operator.promise
+    return this.x == other.x && this.y == other.y;
+  }
+}

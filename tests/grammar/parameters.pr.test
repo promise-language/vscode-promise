@@ -1,0 +1,43 @@
+// SYNTAX TEST "source.promise"
+
+type Foo {
+  // --- Receiver types ---
+  read(&this) int {
+//     ^ keyword.operator.borrow.promise
+//      ^^^^ variable.language.this.promise
+    return 0;
+  }
+
+  mutate(~this) {
+//       ^ keyword.operator.borrow.promise
+//        ^^^^ variable.language.this.promise
+  }
+
+  consume(this) {
+//        ^^^^ variable.language.this.promise
+  }
+}
+
+// --- Regular parameters ---
+add(int x, int y) int {
+//  ^^^ support.type.primitive.promise
+//      ^ variable.parameter.promise
+//         ^^^ support.type.primitive.promise
+//             ^ variable.parameter.promise
+  return x + y;
+}
+
+// --- Variadic ---
+log(...string messages) {
+//  ^^^ keyword.operator.variadic.promise
+}
+
+// --- Reference parameter ---
+process(Foo &f) {
+//          ^ keyword.operator.borrow.promise
+}
+
+swap(Foo ~a, Foo ~b) {
+//       ^ keyword.operator.borrow.promise
+//               ^ keyword.operator.borrow.promise
+}

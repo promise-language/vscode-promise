@@ -1,0 +1,383 @@
+{
+  "Type Declaration": {
+    "prefix": "type",
+    "body": [
+      "type ${1:Name} {",
+      "\t${2:string name;}",
+      "\t$0",
+      "}"
+    ],
+    "description": "Type declaration with fields"
+  },
+  "Type with Inheritance": {
+    "prefix": "typeis",
+    "body": [
+      "type ${1:Child} is ${2:Parent} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Type declaration with inheritance"
+  },
+  "Enum Declaration": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:Name} {",
+      "\t${2:Variant1},",
+      "\t${3:Variant2},",
+      "}"
+    ],
+    "description": "Enum with variants"
+  },
+  "Enum with Data": {
+    "prefix": "enumd",
+    "body": [
+      "enum ${1:Name} {",
+      "\t${2:Variant1}(${3:int value}),",
+      "\t${4:Variant2},",
+      "}"
+    ],
+    "description": "Enum with data variants"
+  },
+  "Function": {
+    "prefix": "fn",
+    "body": [
+      "${1:name}(${2:params}) ${3:ReturnType} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Function declaration"
+  },
+  "Failable Function": {
+    "prefix": "fnf",
+    "body": [
+      "${1:name}(${2:params}) ${3:ReturnType}! {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Failable function declaration"
+  },
+  "Method (read-only)": {
+    "prefix": "method",
+    "body": [
+      "${1:name}(&this) ${2:ReturnType} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Read-only method with &this"
+  },
+  "Method (mutable)": {
+    "prefix": "methodm",
+    "body": [
+      "${1:name}(~this) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Mutable method with ~this"
+  },
+  "Expression Body Method": {
+    "prefix": "methode",
+    "body": [
+      "${1:name}(&this) ${2:ReturnType} => ${3:this.value};"
+    ],
+    "description": "Expression body method"
+  },
+  "Test Function": {
+    "prefix": "test",
+    "body": [
+      "${1:test_name}() \\`test {",
+      "\tassert(${2:condition});",
+      "\t$0",
+      "}"
+    ],
+    "description": "Test function with `test annotation"
+  },
+  "Test with Expected Output": {
+    "prefix": "teste",
+    "body": [
+      "main() \\`test(expected: \"${1:expected output}\") {",
+      "\tprint_line(\"${2:output}\");",
+      "\t$0",
+      "}"
+    ],
+    "description": "E2E test with expected output"
+  },
+  "Main Function": {
+    "prefix": "main",
+    "body": [
+      "main() {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Main entry point"
+  },
+  "Failable Main": {
+    "prefix": "mainf",
+    "body": [
+      "main()! {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Failable main function"
+  },
+  "If": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "If block"
+  },
+  "If-Let Binding": {
+    "prefix": "ifl",
+    "body": [
+      "if ${1:val} := ${2:optional_expr} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "If with unwrap binding"
+  },
+  "If-Else": {
+    "prefix": "ife",
+    "body": [
+      "if ${1:condition} {",
+      "\t$2",
+      "} else {",
+      "\t$0",
+      "}"
+    ],
+    "description": "If-else block"
+  },
+  "For-In Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:collection} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "For-in loop"
+  },
+  "Indexed For-In": {
+    "prefix": "fori",
+    "body": [
+      "for ${1:i}, ${2:item} in ${3:collection} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Indexed for-in loop"
+  },
+  "For Range": {
+    "prefix": "forr",
+    "body": [
+      "for ${1:i} in ${2:0}..${3:10} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "For loop with range"
+  },
+  "Classic For": {
+    "prefix": "forc",
+    "body": [
+      "for ${1:int i = 0}; ${2:i < 10}; ${3:i += 1} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Classic C-style for loop"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "While loop"
+  },
+  "Match": {
+    "prefix": "match",
+    "body": [
+      "match ${1:value} {",
+      "\t${2:pattern} => ${3:result},",
+      "\t_ => ${0:default},",
+      "}"
+    ],
+    "description": "Match expression"
+  },
+  "Error Handler": {
+    "prefix": "err",
+    "body": [
+      "${1:expr} ? ${2:e} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Error handler with ? e { }"
+  },
+  "Typed Error Handler": {
+    "prefix": "errt",
+    "body": [
+      "${1:expr} ? ${2:e} is ${3:ErrorType} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Typed error handler"
+  },
+  "Custom Error Type": {
+    "prefix": "errtype",
+    "body": [
+      "type ${1:MyError} is error {",
+      "\t${2:int code;}",
+      "}"
+    ],
+    "description": "Custom error type"
+  },
+  "Generator": {
+    "prefix": "gen",
+    "body": [
+      "${1:name}() stream[${2:int}] {",
+      "\t$0",
+      "\tyield ${3:value};",
+      "}"
+    ],
+    "description": "Generator function with yield"
+  },
+  "Use Import": {
+    "prefix": "use",
+    "body": [
+      "use ${1:module};"
+    ],
+    "description": "Import a catalog module"
+  },
+  "Channel": {
+    "prefix": "chan",
+    "body": [
+      "${1:ch} := channel[${2:int}](capacity: ${3:10});"
+    ],
+    "description": "Channel creation"
+  },
+  "Go Block": {
+    "prefix": "go",
+    "body": [
+      "go {",
+      "\t$0",
+      "};"
+    ],
+    "description": "Goroutine block"
+  },
+  "Select": {
+    "prefix": "sel",
+    "body": [
+      "select {",
+      "\t${1:v} := <-${2:ch1}:",
+      "\t\t${3:print_line(\"{v}\");},",
+      "\tdefault:",
+      "\t\t$0,",
+      "}"
+    ],
+    "description": "Select block for channel multiplexing"
+  },
+  "Getter": {
+    "prefix": "get",
+    "body": [
+      "get ${1:name} ${2:Type} {",
+      "\treturn ${0:this.value};",
+      "}"
+    ],
+    "description": "Getter declaration"
+  },
+  "Getter Expression": {
+    "prefix": "gete",
+    "body": [
+      "get ${1:name} ${2:Type} => ${0:this.value};"
+    ],
+    "description": "Getter with expression body"
+  },
+  "Factory Constructor": {
+    "prefix": "factory",
+    "body": [
+      "${1:create}(${2:params}) Self \\`factory {",
+      "\treturn Self(${0:fields});",
+      "}"
+    ],
+    "description": "Factory constructor method"
+  },
+  "Explicit Constructor": {
+    "prefix": "new",
+    "body": [
+      "new(${1:params}) {",
+      "\t${0:this.value = value;}",
+      "}"
+    ],
+    "description": "Explicit new constructor"
+  },
+  "Doc Annotation": {
+    "prefix": "doc",
+    "body": [
+      "\\`doc(\"${1:description}\")"
+    ],
+    "description": "`doc annotation"
+  },
+  "Public Annotation": {
+    "prefix": "pub",
+    "body": [
+      "\\`public"
+    ],
+    "description": "`public annotation"
+  },
+  "Lambda": {
+    "prefix": "lambda",
+    "body": [
+      "|${1:params}| -> ${0:expr}"
+    ],
+    "description": "Lambda expression"
+  },
+  "Lambda Block": {
+    "prefix": "lambdab",
+    "body": [
+      "|${1:params}| -> ${2:ReturnType} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Lambda with block body"
+  },
+  "Assert": {
+    "prefix": "assert",
+    "body": [
+      "assert(${1:condition}, \"${2:message}\");"
+    ],
+    "description": "Assertion with message"
+  },
+  "Print Line": {
+    "prefix": "pl",
+    "body": [
+      "print_line(\"${1:message}\");"
+    ],
+    "description": "Print line to stdout"
+  },
+  "Serializable Type": {
+    "prefix": "types",
+    "body": [
+      "type ${1:Name} \\`serializable {",
+      "\t${2:string name;}",
+      "\t$0",
+      "}"
+    ],
+    "description": "Serializable type declaration"
+  },
+  "Read File": {
+    "prefix": "readfile",
+    "body": [
+      "string ${1:content} = io.File.read_content(\"${2:path}\");"
+    ],
+    "description": "Read file content (in failable function)"
+  },
+  "Value Type": {
+    "prefix": "typev",
+    "body": [
+      "type ${1:Name} {",
+      "\t${2:f64} ${3:x} \\`value;",
+      "\t${4:f64} ${5:y} \\`value;",
+      "}"
+    ],
+    "description": "Pure value type (stack-allocated)"
+  }
+}

@@ -1,0 +1,53 @@
+// SYNTAX TEST "source.promise"
+
+// --- Built-in annotation on type ---
+type Foo `public {
+//       ^ punctuation.definition.annotation.promise
+//        ^^^^^^ entity.name.decorator.promise
+}
+
+type Bar `abstract {
+//       ^ punctuation.definition.annotation.promise
+//        ^^^^^^^^ entity.name.decorator.promise
+}
+
+type Baz `native {
+//       ^ punctuation.definition.annotation.promise
+//        ^^^^^^ entity.name.decorator.promise
+}
+
+type Ser `serializable {
+//       ^ punctuation.definition.annotation.promise
+//        ^^^^^^^^^^^^ entity.name.decorator.promise
+}
+
+// --- Multiple annotations ---
+type Iface `structural `public {
+//         ^ punctuation.definition.annotation.promise
+//          ^^^^^^^^^^ entity.name.decorator.promise
+//                     ^ punctuation.definition.annotation.promise
+//                      ^^^^^^ entity.name.decorator.promise
+}
+
+// --- Annotation with parameters ---
+type Documented `doc("A documented type") `public {
+//              ^ punctuation.definition.annotation.promise
+//               ^^^ entity.name.decorator.promise
+//                   ^^^^^^^^^^^^^^^^^^^ string.quoted.double.promise
+}
+
+// --- Annotation on function ---
+test_something() `test {
+//               ^ punctuation.definition.annotation.promise
+//                ^^^^ entity.name.decorator.promise
+}
+
+// --- Test with expected output ---
+main() `test(expected: "hello") {
+//     ^ punctuation.definition.annotation.promise
+//      ^^^^ entity.name.decorator.promise
+//          ^ punctuation.definition.annotation.promise
+//           ^^^^^^^^ variable.parameter.annotation.promise
+//                     ^^^^^^^ string.quoted.double.promise
+//                            ^ punctuation.definition.annotation.promise
+}

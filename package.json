@@ -1,0 +1,152 @@
+{
+  "name": "promise-language",
+  "displayName": "Promise Language",
+  "description": "Language support for the Promise programming language",
+  "version": "0.2.0",
+  "publisher": "promise-lang",
+  "license": "(MIT OR Apache-2.0)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/promise-language/vscode-promise.git"
+  },
+  "homepage": "https://github.com/promise-language/vscode-promise#readme",
+  "bugs": {
+    "url": "https://github.com/promise-language/vscode-promise/issues"
+  },
+  "icon": "icons/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Formatters"
+  ],
+  "keywords": [
+    "promise",
+    "promise-lang",
+    "pr",
+    "language",
+    "syntax",
+    "ownership"
+  ],
+  "activationEvents": [
+    "onLanguage:promise"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "promise",
+        "aliases": [
+          "Promise",
+          "promise"
+        ],
+        "extensions": [
+          ".pr"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/promise-light.svg",
+          "dark": "./icons/promise-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "promise",
+        "scopeName": "source.promise",
+        "path": "./syntaxes/promise.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "promise",
+        "path": "./snippets/promise.json"
+      }
+    ],
+    "configuration": {
+      "title": "Promise",
+      "properties": {
+        "promise.compilerPath": {
+          "type": "string",
+          "default": "promise",
+          "markdownDescription": "Path to the `promise` compiler binary. When left as default, the extension looks for the compiler at `~/.promise/bin/promise` (or an epoch-specific binary like `promise-2026.3` if `promise.toml` specifies an epoch), then falls back to `promise` on PATH. Respects the `PROMISE_HOME` environment variable."
+        },
+        "promise.testTimeout": {
+          "type": "string",
+          "default": "60s",
+          "markdownDescription": "Default timeout for test tasks (Go duration format, e.g. `30s`, `2m`)"
+        },
+        "promise.testParallelism": {
+          "type": "number",
+          "default": 0,
+          "markdownDescription": "Number of parallel tests to run. `0` uses the compiler default (number of CPUs)."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[promise]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "promise-lang.promise-language"
+      }
+    },
+    "taskDefinitions": [
+      {
+        "type": "promise",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "The promise task to run",
+            "enum": [
+              "build",
+              "run",
+              "check",
+              "test file",
+              "test directory",
+              "clean"
+            ]
+          }
+        }
+      }
+    ],
+    "problemMatchers": [
+      {
+        "name": "promise",
+        "owner": "promise",
+        "fileLocation": "autoDetect",
+        "severity": "error",
+        "pattern": {
+          "regexp": "^(.+?):(\\d+):(\\d+):\\s+(.+)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "test": "npx vscode-tmgrammar-test -g syntaxes/promise.tmLanguage.json 'tests/grammar/*.pr.test' && node --test 'tests/unit/*.test.js'",
+    "test:grammar": "npx vscode-tmgrammar-test -g syntaxes/promise.tmLanguage.json 'tests/grammar/*.pr.test'",
+    "test:unit": "node --test 'tests/unit/*.test.js'",
+    "vscode:prepublish": "npm run compile",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "publish:ovsx": "ovsx publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "ovsx": "^0.9.0",
+    "typescript": "^5.3.0",
+    "vscode-tmgrammar-test": "^0.1.3"
+  }
+}

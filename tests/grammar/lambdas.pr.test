@@ -1,0 +1,22 @@
+// SYNTAX TEST "source.promise"
+
+test_lambdas() {
+// --- Lambda with params ---
+  f := |int x| -> x * 2;
+//      ^^^ support.type.primitive.promise
+//          ^ variable.parameter.promise
+
+// --- Lambda with block body ---
+  g := |int x, int y| -> int {
+//      ^^^ support.type.primitive.promise
+//          ^ variable.parameter.promise
+//             ^^^ support.type.primitive.promise
+//                 ^ variable.parameter.promise
+    return x + y;
+  };
+
+// --- Move lambda with empty params ---
+  h := move || -> 42;
+//     ^^^^ keyword.other.move.promise
+//          ^^ punctuation.definition.lambda.promise
+}

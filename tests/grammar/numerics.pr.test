@@ -1,0 +1,59 @@
+// SYNTAX TEST "source.promise"
+
+main() {
+// --- Integer literals ---
+  42;
+//^^ constant.numeric.integer.promise
+  1_000_000;
+//^^^^^^^^^ constant.numeric.integer.promise
+  0;
+//^ constant.numeric.integer.promise
+
+// --- Integer with suffix ---
+  42u8;
+//^^^^ constant.numeric.integer.promise
+  100i32;
+//^^^^^^ constant.numeric.integer.promise
+  255u;
+//^^^^ constant.numeric.integer.promise
+
+// --- Hex ---
+  0xFF;
+//^^^^ constant.numeric.hex.promise
+  0xDEAD_BEEF;
+//^^^^^^^^^^^ constant.numeric.hex.promise
+
+// --- Octal ---
+  0o77;
+//^^^^ constant.numeric.octal.promise
+
+// --- Binary ---
+  0b1010;
+//^^^^^^ constant.numeric.binary.promise
+  0b1111_0000;
+//^^^^^^^^^^^ constant.numeric.binary.promise
+
+// --- Float ---
+  3.14;
+//^^^^ constant.numeric.float.promise
+  1.0e10;
+//^^^^^^ constant.numeric.float.promise
+  2.5f32;
+//^^^^^^ constant.numeric.float.promise
+  1_000.5;
+//^^^^^^^ constant.numeric.float.promise
+
+// --- Boolean / none ---
+  true;
+//^^^^ constant.language.boolean.promise
+  false;
+//^^^^^ constant.language.boolean.promise
+  none;
+//^^^^ constant.language.none.promise
+
+// --- this / super ---
+  this;
+//^^^^ variable.language.this.promise
+  super;
+//^^^^^ variable.language.super.promise
+}

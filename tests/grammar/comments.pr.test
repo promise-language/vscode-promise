@@ -1,0 +1,7 @@
+// SYNTAX TEST "source.promise"
+
+// Line comment
+// <--- comment.line.double-slash.promise
+
+/* Block comment */
+// <--- comment.block.promise

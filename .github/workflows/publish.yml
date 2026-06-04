@@ -1,0 +1,36 @@
+name: Publish
+
+# Publishes the extension to the VS Code Marketplace and Open VSX when a
+# version tag (e.g. v0.2.1) is pushed.
+#
+# Required repository secrets:
+#   VSCE_PAT  - Azure DevOps Personal Access Token (Marketplace > Manage scope)
+#   OVSX_PAT  - Open VSX access token (https://open-vsx.org)
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run compile
+      - run: npm test
+      - name: Package
+        run: npx vsce package
+      - name: Publish to VS Code Marketplace
+        run: npx vsce publish --pat "$VSCE_PAT"
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      - name: Publish to Open VSX
+        run: npx ovsx publish --pat "$OVSX_PAT"
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}

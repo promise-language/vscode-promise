@@ -1,0 +1,80 @@
+// SYNTAX TEST "source.promise"
+
+// --- Type declaration ---
+type Foo {
+// <-- keyword.declaration.type.promise
+//   ^^^ entity.name.type.promise
+}
+
+// --- Type with inheritance ---
+type Bar is Baz {
+//       ^^ keyword.other.is.promise
+//          ^^^ entity.name.type.promise
+}
+
+// --- Generic type ---
+type Container[T] {
+//   ^^^^^^^^^ entity.name.type.promise
+//            ^ punctuation.definition.generic.begin.promise
+//             ^ entity.name.type.parameter.promise
+//              ^ punctuation.definition.generic.end.promise
+}
+
+// --- Enum declaration ---
+enum Color {
+// <-- keyword.declaration.enum.promise
+//   ^^^^^ entity.name.type.promise
+  Red,
+//^^^ variable.other.enummember.promise
+  Green,
+//^^^^^ variable.other.enummember.promise
+  Nothing,
+//^^^^^^^ variable.other.enummember.promise
+}
+
+// --- Enum with data variants followed by a getter (regression: the data variant
+//     must not be parsed as a runaway method that swallows the first getter) ---
+enum Value {
+  Empty,
+//^^^^^ variable.other.enummember.promise
+  Num(f64 n),
+//^^^ variable.other.enummember.promise
+//   ^ punctuation.definition.parameters.begin.promise
+//    ^^^ support.type.primitive.promise
+//        ^ variable.parameter.promise
+//         ^ punctuation.definition.parameters.end.promise
+  Text(string s),
+//^^^^ variable.other.enummember.promise
+  get is_empty bool {
+//^^^ keyword.other.property.promise
+//    ^^^^^^^^ entity.name.function.getter.promise
+//             ^^^^ support.type.primitive.promise
+  }
+}
+
+// --- Function declarations ---
+main() {
+// <-- entity.name.function.promise
+}
+
+compute(int x, int y) int {
+// <--- entity.name.function.promise
+}
+
+// --- Failable function ---
+parse!(string input) int {
+// <---- entity.name.function.promise
+//   ^ keyword.operator.failable.promise
+//    ^ punctuation.definition.parameters.begin.promise
+//                   ^^^ support.type.primitive.promise
+}
+
+// --- Failable function without return type ---
+bump_failable!(Guarded ~g) {
+// <------------ entity.name.function.promise
+//           ^ keyword.operator.failable.promise
+//            ^ punctuation.definition.parameters.begin.promise
+//             ^^^^^^^ entity.name.type.promise
+//                     ^ keyword.operator.borrow.promise
+//                      ^ variable.parameter.promise
+}

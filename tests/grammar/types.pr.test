@@ -1,0 +1,61 @@
+// SYNTAX TEST "source.promise"
+
+main() {
+// --- Primitive types ---
+  int x = 0;
+//^^^ support.type.primitive.promise
+  i8 a = 0;
+//^^ support.type.primitive.promise
+  i16 b = 0;
+//^^^ support.type.primitive.promise
+  i32 c = 0;
+//^^^ support.type.primitive.promise
+  i64 d = 0;
+//^^^ support.type.primitive.promise
+  uint e = 0;
+//^^^^ support.type.primitive.promise
+  u8 f = 0;
+//^^ support.type.primitive.promise
+  u16 g = 0;
+//^^^ support.type.primitive.promise
+  u32 h = 0;
+//^^^ support.type.primitive.promise
+  u64 i = 0;
+//^^^ support.type.primitive.promise
+  f32 j = 0.0;
+//^^^ support.type.primitive.promise
+  f64 k = 0.0;
+//^^^ support.type.primitive.promise
+  bool flag = true;
+//^^^^ support.type.primitive.promise
+  char ch = 'a';
+//^^^^ support.type.primitive.promise
+  string name = "hello";
+//^^^^^^ support.type.primitive.promise
+  void;
+//^^^^ support.type.primitive.promise
+  error;
+//^^^^^ support.type.primitive.promise
+
+// --- User-defined types ---
+  Foo bar;
+//^^^ entity.name.type.promise
+  Vector items;
+//^^^^^^ entity.name.type.promise
+
+// --- Self type ---
+  Self;
+//^^^^ entity.name.type.self.promise
+
+// --- Built-in collection types ---
+  map[string, int] m;
+//^^^ support.type.collection.promise
+
+// --- Built-in parameterized types ---
+  stream[int] s;
+//^^^^^^ support.type.builtin.promise
+  channel[string] ch2;
+//^^^^^^^ support.type.builtin.promise
+  task[bool] t;
+//^^^^ support.type.builtin.promise
+}

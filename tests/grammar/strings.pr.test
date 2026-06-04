@@ -1,0 +1,47 @@
+// SYNTAX TEST "source.promise"
+
+test_strings() {
+// --- Regular string ---
+  "hello world";
+//^ string.quoted.double.promise
+//            ^ string.quoted.double.promise
+
+// --- Escape sequences ---
+  "hello\nworld";
+//      ^^ constant.character.escape.promise
+  "tab\there";
+//    ^^ constant.character.escape.promise
+  "null\0end";
+//     ^^ constant.character.escape.promise
+  "escaped\\backslash";
+//        ^^ constant.character.escape.promise
+  "escaped\"quote";
+//        ^^ constant.character.escape.promise
+  "escaped\{brace";
+//        ^^ constant.character.escape.promise
+
+// --- Unicode escape ---
+  "emoji \u{1F600}";
+//       ^^^^^^^^^ constant.character.escape.unicode.promise
+
+// --- String interpolation ---
+  "hello {name}";
+//       ^ punctuation.definition.interpolation.begin.promise
+//            ^ punctuation.definition.interpolation.end.promise
+
+// --- Raw string ---
+  r"no \n escapes here";
+//^^ string.quoted.raw.promise
+
+// --- Triple-quoted string ---
+  """multiline string""";
+//^^^ string.quoted.triple.promise
+
+// --- Character literal ---
+  'a';
+//^ string.quoted.single.promise
+  '\n';
+// ^^ constant.character.escape.promise
+  '\u{41}';
+// ^^^^^^ constant.character.escape.unicode.promise
+}

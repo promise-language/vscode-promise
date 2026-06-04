@@ -1,0 +1,8 @@
+// SYNTAX TEST "source.promise"
+
+main() {
+  use conn := connect();
+//^^^ keyword.control.use-binding.promise
+//    ^^^^ variable.other.promise
+//         ^^ keyword.operator.assignment.walrus.promise
+}

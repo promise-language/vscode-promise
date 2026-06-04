@@ -1,0 +1,102 @@
+// SYNTAX TEST "source.promise"
+
+test_operators() {
+// --- Arithmetic ---
+  x + y;
+//  ^ keyword.operator.arithmetic.promise
+  x - y;
+//  ^ keyword.operator.arithmetic.promise
+  x * y;
+//  ^ keyword.operator.arithmetic.promise
+  x / y;
+//  ^ keyword.operator.arithmetic.promise
+  x % y;
+//  ^ keyword.operator.arithmetic.promise
+
+// --- Increment / decrement ---
+  i++;
+// ^^ keyword.operator.increment.promise
+  i--;
+// ^^ keyword.operator.increment.promise
+
+// --- Comparison ---
+  x == y;
+//  ^^ keyword.operator.comparison.promise
+  x != y;
+//  ^^ keyword.operator.comparison.promise
+  x <= y;
+//  ^^ keyword.operator.comparison.promise
+  x >= y;
+//  ^^ keyword.operator.comparison.promise
+  x < y;
+//  ^ keyword.operator.comparison.promise
+  x > y;
+//  ^ keyword.operator.comparison.promise
+
+// --- Logical ---
+  x && y;
+//  ^^ keyword.operator.logical.promise
+  x || y;
+//  ^^ keyword.operator.logical.promise
+
+// --- Assignment ---
+  x = 1;
+//  ^ keyword.operator.assignment.promise
+  x += 1;
+//  ^^ keyword.operator.assignment.compound.promise
+  x -= 1;
+//  ^^ keyword.operator.assignment.compound.promise
+  x *= 2;
+//  ^^ keyword.operator.assignment.compound.promise
+  x /= 2;
+//  ^^ keyword.operator.assignment.compound.promise
+  x %= 3;
+//  ^^ keyword.operator.assignment.compound.promise
+
+// --- Walrus ---
+  val := expr;
+//    ^^ keyword.operator.assignment.walrus.promise
+
+// --- Range ---
+  0..10;
+// ^^ keyword.operator.range.promise
+  0..=10;
+// ^^^ keyword.operator.range.promise
+
+// --- Shift ---
+  x << y;
+//  ^^ keyword.operator.bitwise.shift.promise
+  x >> y;
+//  ^^ keyword.operator.bitwise.shift.promise
+
+// --- Bitwise ---
+  x & y;
+//  ^ keyword.operator.bitwise.promise
+  x ^ y;
+//  ^ keyword.operator.bitwise.promise
+
+// --- Arrow ---
+  f := |int x| -> x;
+//             ^^ punctuation.arrow.promise
+
+// --- Optional chaining ---
+  x?.y;
+// ^^ keyword.operator.optional-chain.promise
+
+// --- Elvis ---
+  x ?: 0;
+//  ^^ keyword.operator.elvis.promise
+
+// --- Channel receive ---
+  v := <-ch;
+//     ^^ keyword.operator.channel.promise
+
+// --- Forced cast ---
+  byte as! int;
+//     ^^ keyword.other.promise
+//       ^ keyword.operator.force.promise
+
+// --- Optional marker ---
+  x?;
+// ^ keyword.operator.optional.promise
+}

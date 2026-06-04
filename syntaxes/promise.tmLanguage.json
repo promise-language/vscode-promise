@@ -1,0 +1,918 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Promise",
+  "scopeName": "source.promise",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#use-declaration" },
+    { "include": "#type-declaration" },
+    { "include": "#enum-declaration" },
+    { "include": "#getter-declaration" },
+    { "include": "#setter-declaration" },
+    { "include": "#function-declaration" },
+    { "include": "#statements" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.promise",
+          "begin": "/\\*",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.line.double-slash.promise",
+          "match": "//.*$"
+        }
+      ]
+    },
+
+    "use-declaration": {
+      "patterns": [
+        {
+          "comment": "use alias \"url\";",
+          "match": "\\b(use)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s+(\"[^\"]*\")\\s*;",
+          "captures": {
+            "1": { "name": "keyword.control.import.promise" },
+            "2": { "name": "entity.name.module.promise" },
+            "3": { "name": "string.quoted.double.promise" }
+          }
+        },
+        {
+          "comment": "use module as alias;",
+          "match": "\\b(use)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s+(as)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*;",
+          "captures": {
+            "1": { "name": "keyword.control.import.promise" },
+            "2": { "name": "entity.name.module.promise" },
+            "3": { "name": "keyword.other.as.promise" },
+            "4": { "name": "entity.name.module.promise" }
+          }
+        },
+        {
+          "comment": "use module;",
+          "match": "\\b(use)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*;",
+          "captures": {
+            "1": { "name": "keyword.control.import.promise" },
+            "2": { "name": "entity.name.module.promise" }
+          }
+        }
+      ]
+    },
+
+    "type-declaration": {
+      "comment": "type Name [generic] [is Parent] [annotations] {",
+      "begin": "\\b(type)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "beginCaptures": {
+        "1": { "name": "keyword.declaration.type.promise" },
+        "2": { "name": "entity.name.type.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#generic-params" },
+        { "include": "#is-clause" },
+        { "include": "#annotations" },
+        { "include": "#type-body" }
+      ]
+    },
+
+    "enum-declaration": {
+      "comment": "enum Name [generic] [annotations] {",
+      "begin": "\\b(enum)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "beginCaptures": {
+        "1": { "name": "keyword.declaration.enum.promise" },
+        "2": { "name": "entity.name.type.promise" }
+      },
+      "end": "(?<=\\})",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#generic-params" },
+        { "include": "#annotations" },
+        { "include": "#enum-body" }
+      ]
+    },
+
+    "function-declaration": {
+      "comment": "Top-level function: name[!][generics](params) ReturnType annotations {",
+      "begin": "^\\s*(?!(?:if|else|for|while|match|return|break|continue|yield|go|select|raise|type|enum|use|get|set|new|unsafe)\\b)([a-zA-Z_][a-zA-Z0-9_]*)(!)?\\s*(?=\\[|\\()",
+      "beginCaptures": {
+        "1": { "name": "entity.name.function.promise" },
+        "2": { "name": "keyword.operator.failable.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#generic-params" },
+        { "include": "#parameter-list" },
+        { "include": "#failable-marker" },
+        { "include": "#type-reference" },
+        { "include": "#annotations" },
+        { "include": "#expression-body" },
+        { "include": "#block" }
+      ]
+    },
+
+    "getter-declaration": {
+      "comment": "get name Type annotations { ... } or get name Type annotations;",
+      "begin": "^\\s*(get)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(!)?",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.property.promise" },
+        "2": { "name": "entity.name.function.getter.promise" },
+        "3": { "name": "keyword.operator.failable.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#type-reference" },
+        { "include": "#annotations" },
+        { "include": "#expression-body" },
+        { "include": "#block" }
+      ]
+    },
+
+    "setter-declaration": {
+      "comment": "set name[!](Type param) annotations { ... }",
+      "begin": "^\\s*(set)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(!)?\\s*(?=\\()",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.property.promise" },
+        "2": { "name": "entity.name.function.setter.promise" },
+        "3": { "name": "keyword.operator.failable.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#parameter-list" },
+        { "include": "#annotations" },
+        { "include": "#block" }
+      ]
+    },
+
+    "is-clause": {
+      "comment": "is ParentType, OtherParent",
+      "begin": "\\b(is)\\b",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.is.promise" }
+      },
+      "end": "(?=\\{|`)",
+      "patterns": [
+        { "include": "#type-reference" },
+        { "include": "#generic-params" },
+        {
+          "match": ",",
+          "name": "punctuation.separator.promise"
+        }
+      ]
+    },
+
+    "generic-params": {
+      "comment": "Type parameters [T, U: Constraint + Other]",
+      "begin": "\\[",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.generic.begin.promise" }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.generic.end.promise" }
+      },
+      "patterns": [
+        { "include": "#comments" },
+        {
+          "match": "\\b([A-Z_][a-zA-Z0-9_]*)\\s*(:)\\s*",
+          "captures": {
+            "1": { "name": "entity.name.type.parameter.promise" },
+            "2": { "name": "punctuation.separator.constraint.promise" }
+          }
+        },
+        {
+          "match": "\\b([A-Z_][a-zA-Z0-9_]*)\\b",
+          "name": "entity.name.type.parameter.promise"
+        },
+        {
+          "match": "\\+",
+          "name": "keyword.operator.constraint.promise"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.promise"
+        },
+        { "include": "#type-reference" }
+      ]
+    },
+
+    "type-body": {
+      "comment": "Body of a type declaration { fields, methods, getters, setters }",
+      "begin": "\\{",
+      "beginCaptures": { "0": { "name": "punctuation.definition.block.begin.promise" } },
+      "end": "\\}",
+      "endCaptures": { "0": { "name": "punctuation.definition.block.end.promise" } },
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#member-getter" },
+        { "include": "#member-setter" },
+        { "include": "#constructor-declaration" },
+        { "include": "#operator-method" },
+        { "include": "#method-declaration" },
+        { "include": "#field-declaration" }
+      ]
+    },
+
+    "enum-body": {
+      "comment": "Body of an enum declaration { variants, methods }",
+      "begin": "\\{",
+      "beginCaptures": { "0": { "name": "punctuation.definition.block.begin.promise" } },
+      "end": "\\}",
+      "endCaptures": { "0": { "name": "punctuation.definition.block.end.promise" } },
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#member-getter" },
+        { "include": "#member-setter" },
+        { "include": "#enum-variant" },
+        { "include": "#method-declaration" },
+        { "include": "#expressions" }
+      ]
+    },
+
+    "enum-variant": {
+      "patterns": [
+        {
+          "comment": "Variant with data: Name(Type field, ...) — bounded begin/end so it consumes the parameter list and nothing more. Leading \\s* lets this match at the same start position as #method-declaration so list order (this first) wins the tie.",
+          "begin": "\\s*\\b([A-Z][a-zA-Z0-9_]*)\\s*(?=\\()",
+          "beginCaptures": {
+            "1": { "name": "variable.other.enummember.promise" }
+          },
+          "end": "(?<=\\))",
+          "patterns": [
+            { "include": "#parameter-list" }
+          ]
+        },
+        {
+          "comment": "Fieldless variant: Name",
+          "match": "\\b([A-Z][a-zA-Z0-9_]*)\\b",
+          "name": "variable.other.enummember.promise"
+        }
+      ]
+    },
+
+    "field-declaration": {
+      "comment": "Type name [annotations] [= default]; — type may carry optional (?) and ref (&/~) markers",
+      "match": "\\s*(?:(\\.\\.\\.)?\\s*)([a-zA-Z_][a-zA-Z0-9_\\[\\],\\s?&~]*?)\\s+([a-z_][a-zA-Z0-9_]*)\\s*((?:`[a-zA-Z_][a-zA-Z0-9_]*(?:\\([^)]*\\))?\\s*)*)(?:(=)\\s*)?",
+      "captures": {
+        "1": { "name": "keyword.operator.variadic.promise" },
+        "2": {
+          "patterns": [
+            { "include": "#type-reference" },
+            { "match": "\\?", "name": "keyword.operator.optional.promise" },
+            { "match": "[&~]", "name": "keyword.operator.borrow.promise" }
+          ]
+        },
+        "3": { "name": "variable.other.field.promise" },
+        "4": { "patterns": [{ "include": "#annotations" }] },
+        "5": { "name": "keyword.operator.assignment.promise" }
+      }
+    },
+
+    "constructor-declaration": {
+      "comment": "new[!](params) { body }",
+      "begin": "\\s+(new)(!)?\\s*(?=\\()",
+      "beginCaptures": {
+        "1": { "name": "entity.name.function.constructor.promise" },
+        "2": { "name": "keyword.operator.failable.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#parameter-list" },
+        { "include": "#failable-marker" },
+        { "include": "#annotations" },
+        { "include": "#block" }
+      ]
+    },
+
+    "operator-method": {
+      "comment": "Operator overloading methods: +(T other) T, ==(T other) bool, [](int i) T, ..(int end) Range, etc.",
+      "begin": "\\s+(\\.\\.=|\\.\\.|\\+\\+|--|<<|>>|==|!=|<=|>=|\\[:\\]=?|\\[\\]=?|~\\(\\)|-\\(\\)|\\+|-|\\*|/|%|<|>|&|\\||\\^|!)\\s*(?=\\()",
+      "beginCaptures": {
+        "1": { "name": "entity.name.function.operator.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#parameter-list" },
+        { "include": "#failable-marker" },
+        { "include": "#type-reference" },
+        { "include": "#annotations" },
+        { "include": "#expression-body" },
+        { "include": "#block" }
+      ]
+    },
+
+    "method-declaration": {
+      "comment": "name[!][generics](params) ReturnType annotations { body }",
+      "begin": "\\s+(?!(?:get|set|new)\\b)([a-zA-Z_][a-zA-Z0-9_]*)(!)?\\s*(?=\\[|\\()",
+      "beginCaptures": {
+        "1": { "name": "entity.name.function.method.promise" },
+        "2": { "name": "keyword.operator.failable.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#generic-params" },
+        { "include": "#parameter-list" },
+        { "include": "#failable-marker" },
+        { "include": "#type-reference" },
+        { "include": "#annotations" },
+        { "include": "#expression-body" },
+        { "include": "#block" }
+      ]
+    },
+
+    "member-getter": {
+      "comment": "get name Type [annotations] { body } | get name Type [annotations] => expr;",
+      "begin": "\\s+(get)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(!)?",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.property.promise" },
+        "2": { "name": "entity.name.function.getter.promise" },
+        "3": { "name": "keyword.operator.failable.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#type-reference" },
+        { "include": "#annotations" },
+        { "include": "#expression-body" },
+        { "include": "#block" },
+        { "include": "#expressions" }
+      ]
+    },
+
+    "member-setter": {
+      "comment": "set name[!](Type param) [annotations] { body }",
+      "begin": "\\s+(set)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(!)?\\s*(?=\\()",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.property.promise" },
+        "2": { "name": "entity.name.function.setter.promise" },
+        "3": { "name": "keyword.operator.failable.promise" }
+      },
+      "end": "(?<=\\})|(?<=;)",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#parameter-list" },
+        { "include": "#annotations" },
+        { "include": "#block" }
+      ]
+    },
+
+    "expression-body": {
+      "comment": "Expression body: => expr;",
+      "begin": "=>",
+      "beginCaptures": { "0": { "name": "punctuation.arrow.promise" } },
+      "end": "(?=;)",
+      "patterns": [
+        { "include": "#expressions" }
+      ]
+    },
+
+    "failable-marker": {
+      "comment": "Failable return type marker !",
+      "match": "!(?!=)",
+      "name": "keyword.operator.failable.promise"
+    },
+
+    "parameter-list": {
+      "begin": "\\(",
+      "beginCaptures": { "0": { "name": "punctuation.definition.parameters.begin.promise" } },
+      "end": "\\)",
+      "endCaptures": { "0": { "name": "punctuation.definition.parameters.end.promise" } },
+      "patterns": [
+        { "include": "#comments" },
+        {
+          "comment": "Receiver: &this, ~this, this",
+          "match": "([&~]?)(this)\\b",
+          "captures": {
+            "1": { "name": "keyword.operator.borrow.promise" },
+            "2": { "name": "variable.language.this.promise" }
+          }
+        },
+        {
+          "comment": "Variadic: ...Type name",
+          "match": "(\\.\\.\\.)",
+          "name": "keyword.operator.variadic.promise"
+        },
+        { "include": "#annotations" },
+        { "include": "#type-reference" },
+        {
+          "comment": "Parameter name before comma, close-paren, equals, or annotation",
+          "match": "\\b([a-z_][a-zA-Z0-9_]*)\\b(?=\\s*(?:,|\\)|=|`))",
+          "name": "variable.parameter.promise"
+        },
+        {
+          "match": "[&~]",
+          "name": "keyword.operator.borrow.promise"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.promise"
+        },
+        { "include": "#expressions" }
+      ]
+    },
+
+    "annotations": {
+      "patterns": [
+        {
+          "comment": "Built-in annotations: `public, `test, `native, etc.",
+          "match": "(`)(public|abstract|native|value|instance|variant|type|raw|final|factory|test|copy|clone|inline|deprecated|serializable|structural|global|mono|extern|unsafe|packed|align|required)\\b(?!\\s*\\()",
+          "captures": {
+            "1": { "name": "punctuation.definition.annotation.promise" },
+            "2": { "name": "entity.name.decorator.promise" }
+          }
+        },
+        {
+          "comment": "Annotation with params: `doc(...), `test(...), `target(...), `embed(...)",
+          "begin": "(`)([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
+          "beginCaptures": {
+            "1": { "name": "punctuation.definition.annotation.promise" },
+            "2": { "name": "entity.name.decorator.promise" },
+            "3": { "name": "punctuation.definition.annotation.promise" }
+          },
+          "end": "(\\))",
+          "endCaptures": {
+            "1": { "name": "punctuation.definition.annotation.promise" }
+          },
+          "patterns": [
+            { "include": "#strings" },
+            { "include": "#numeric-literals" },
+            { "include": "#constants" },
+            {
+              "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*:",
+              "captures": {
+                "1": { "name": "variable.parameter.annotation.promise" }
+              }
+            },
+            {
+              "match": ",",
+              "name": "punctuation.separator.promise"
+            }
+          ]
+        },
+        {
+          "comment": "Simple annotation: `name",
+          "match": "(`)([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+          "captures": {
+            "1": { "name": "punctuation.definition.annotation.promise" },
+            "2": { "name": "entity.name.decorator.promise" }
+          }
+        }
+      ]
+    },
+
+    "type-reference": {
+      "patterns": [
+        {
+          "comment": "Primitive types",
+          "match": "\\b(int|i8|i16|i32|i64|uint|u8|u16|u32|u64|f32|f64|bool|char|string|void|error)\\b",
+          "name": "support.type.primitive.promise"
+        },
+        {
+          "comment": "Self type",
+          "match": "\\b(Self)\\b",
+          "name": "entity.name.type.self.promise"
+        },
+        {
+          "comment": "Built-in collection types",
+          "match": "\\b(map)\\b(?=\\[)",
+          "name": "support.type.collection.promise"
+        },
+        {
+          "comment": "Built-in parameterized types (lowercase)",
+          "match": "\\b(stream|iter|channel|task)\\b(?=\\[)",
+          "name": "support.type.builtin.promise"
+        },
+        {
+          "comment": "User-defined type names (PascalCase)",
+          "match": "\\b([A-Z][a-zA-Z0-9_]*)\\b",
+          "name": "entity.name.type.promise"
+        }
+      ]
+    },
+
+    "block": {
+      "begin": "\\{",
+      "beginCaptures": { "0": { "name": "punctuation.definition.block.begin.promise" } },
+      "end": "\\}",
+      "endCaptures": { "0": { "name": "punctuation.definition.block.end.promise" } },
+      "patterns": [
+        { "include": "#statements" }
+      ]
+    },
+
+    "statements": {
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#use-binding" },
+        { "include": "#lambda-expression" },
+        { "include": "#keywords" },
+        { "include": "#annotations" },
+        { "include": "#expressions" }
+      ]
+    },
+
+    "use-binding": {
+      "comment": "use binding: use conn := expr;",
+      "match": "\\b(use)\\s+([a-z_][a-zA-Z0-9_]*)\\s*(:=)",
+      "captures": {
+        "1": { "name": "keyword.control.use-binding.promise" },
+        "2": { "name": "variable.other.promise" },
+        "3": { "name": "keyword.operator.assignment.walrus.promise" }
+      }
+    },
+
+    "keywords": {
+      "patterns": [
+        {
+          "comment": "Control flow keywords",
+          "match": "\\b(if|else|for|while|match|return|break|continue|yield)\\b",
+          "name": "keyword.control.promise"
+        },
+        {
+          "comment": "Declaration keywords",
+          "match": "\\b(type|enum)\\b",
+          "name": "keyword.declaration.promise"
+        },
+        {
+          "comment": "Error handling",
+          "match": "\\b(raise)\\b",
+          "name": "keyword.control.error.promise"
+        },
+        {
+          "comment": "Concurrency keywords",
+          "match": "\\b(go|select)\\b",
+          "name": "keyword.control.concurrency.promise"
+        },
+        {
+          "comment": "Forced cast as!",
+          "match": "\\b(as)\\s*(!)",
+          "captures": {
+            "1": { "name": "keyword.other.promise" },
+            "2": { "name": "keyword.operator.force.promise" }
+          }
+        },
+        {
+          "comment": "Modifier keywords",
+          "match": "\\b(is|as|move|unsafe|in)\\b",
+          "name": "keyword.other.promise"
+        },
+        {
+          "comment": "Property keywords (inside bodies)",
+          "match": "\\b(get|set|new)\\b",
+          "name": "keyword.other.property.promise"
+        },
+        {
+          "comment": "Contextual keywords: present/absent for optional checks",
+          "match": "\\b(present|absent)\\b",
+          "name": "constant.language.promise"
+        },
+        {
+          "comment": "Select default",
+          "match": "\\b(default)\\b",
+          "name": "keyword.control.default.promise"
+        },
+        {
+          "comment": "Super call",
+          "match": "\\b(super)\\b",
+          "name": "variable.language.super.promise"
+        }
+      ]
+    },
+
+    "expressions": {
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#strings" },
+        { "include": "#numeric-literals" },
+        { "include": "#constants" },
+        { "include": "#lambda-expression" },
+        { "include": "#operators" },
+        { "include": "#function-call" },
+        { "include": "#enum-variant-ref" },
+        { "include": "#type-reference" },
+        { "include": "#identifiers" },
+        { "include": "#punctuation" },
+        { "include": "#block" }
+      ]
+    },
+
+    "strings": {
+      "patterns": [
+        {
+          "comment": "Triple-quoted string (multiline, no interpolation)",
+          "name": "string.quoted.triple.promise",
+          "begin": "\"\"\"",
+          "end": "\"\"\""
+        },
+        {
+          "comment": "Raw string (no escapes, no interpolation)",
+          "name": "string.quoted.raw.promise",
+          "begin": "r\"",
+          "end": "\""
+        },
+        {
+          "comment": "Regular string with interpolation",
+          "name": "string.quoted.double.promise",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "comment": "Escape sequences",
+              "match": "\\\\[ntrb\\\\\"0{]",
+              "name": "constant.character.escape.promise"
+            },
+            {
+              "comment": "Unicode escape",
+              "match": "\\\\u\\{[0-9a-fA-F]+\\}",
+              "name": "constant.character.escape.unicode.promise"
+            },
+            {
+              "comment": "String interpolation",
+              "begin": "(?<!\\\\)\\{",
+              "beginCaptures": {
+                "0": { "name": "punctuation.definition.interpolation.begin.promise" }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": { "name": "punctuation.definition.interpolation.end.promise" }
+              },
+              "contentName": "meta.interpolation.promise",
+              "patterns": [
+                { "include": "#expressions" }
+              ]
+            }
+          ]
+        },
+        {
+          "comment": "Character literal",
+          "name": "string.quoted.single.promise",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "match": "\\\\[ntrb\\\\'0]",
+              "name": "constant.character.escape.promise"
+            },
+            {
+              "match": "\\\\u\\{[0-9a-fA-F]+\\}",
+              "name": "constant.character.escape.unicode.promise"
+            }
+          ]
+        }
+      ]
+    },
+
+    "numeric-literals": {
+      "patterns": [
+        {
+          "comment": "Float literal with optional suffix",
+          "match": "\\b[0-9][0-9_]*\\.[0-9][0-9_]*(?:[eE][+-]?[0-9_]+)?(?:f32|f64)?\\b",
+          "name": "constant.numeric.float.promise"
+        },
+        {
+          "comment": "Float literal with exponent only",
+          "match": "\\b[0-9][0-9_]*[eE][+-]?[0-9_]+(?:f32|f64)?\\b",
+          "name": "constant.numeric.float.promise"
+        },
+        {
+          "comment": "Hex integer",
+          "match": "\\b0x[0-9a-fA-F][0-9a-fA-F_]*(?:u8|u16|u32|u64|i8|i16|i32|i64|u)?\\b",
+          "name": "constant.numeric.hex.promise"
+        },
+        {
+          "comment": "Octal integer",
+          "match": "\\b0o[0-7][0-7_]*(?:u8|u16|u32|u64|i8|i16|i32|i64|u)?\\b",
+          "name": "constant.numeric.octal.promise"
+        },
+        {
+          "comment": "Binary integer",
+          "match": "\\b0b[01][01_]*(?:u8|u16|u32|u64|i8|i16|i32|i64|u)?\\b",
+          "name": "constant.numeric.binary.promise"
+        },
+        {
+          "comment": "Decimal integer with suffix",
+          "match": "\\b[0-9][0-9_]*(?:u8|u16|u32|u64|i8|i16|i32|i64|u)\\b",
+          "name": "constant.numeric.integer.promise"
+        },
+        {
+          "comment": "Decimal integer (plain)",
+          "match": "\\b[0-9][0-9_]*\\b",
+          "name": "constant.numeric.integer.promise"
+        }
+      ]
+    },
+
+    "constants": {
+      "patterns": [
+        {
+          "comment": "Boolean literals",
+          "match": "\\b(true|false)\\b",
+          "name": "constant.language.boolean.promise"
+        },
+        {
+          "comment": "None literal",
+          "match": "\\b(none)\\b",
+          "name": "constant.language.none.promise"
+        },
+        {
+          "comment": "this keyword",
+          "match": "\\b(this)\\b",
+          "name": "variable.language.this.promise"
+        },
+        {
+          "comment": "super keyword",
+          "match": "\\b(super)\\b",
+          "name": "variable.language.super.promise"
+        }
+      ]
+    },
+
+    "lambda-expression": {
+      "patterns": [
+        {
+          "comment": "Empty-params lambda with move: move || -> expr or move || { body }",
+          "match": "(move)(\\s+)(\\|\\|)",
+          "captures": {
+            "1": { "name": "keyword.other.move.promise" },
+            "3": { "name": "punctuation.definition.lambda.promise" }
+          }
+        },
+        {
+          "comment": "Lambda with params: [move] |params| -> expr or { body }",
+          "begin": "(move\\s+)?(?<=[=:,(\\s])\\|(?!\\|)",
+          "beginCaptures": {
+            "1": { "name": "keyword.other.move.promise" }
+          },
+          "end": "\\|",
+          "patterns": [
+            { "include": "#annotations" },
+            { "include": "#type-reference" },
+            {
+              "match": "\\b([a-z_][a-zA-Z0-9_]*)\\b",
+              "name": "variable.parameter.promise"
+            },
+            {
+              "match": "[&~]",
+              "name": "keyword.operator.borrow.promise"
+            },
+            {
+              "match": ",",
+              "name": "punctuation.separator.promise"
+            },
+            { "include": "#expressions" }
+          ]
+        }
+      ]
+    },
+
+    "operators": {
+      "patterns": [
+        {
+          "comment": "Arrow operators",
+          "match": "->|=>",
+          "name": "punctuation.arrow.promise"
+        },
+        {
+          "comment": "Channel receive",
+          "match": "<-",
+          "name": "keyword.operator.channel.promise"
+        },
+        {
+          "comment": "Inclusive range",
+          "match": "\\.\\.=",
+          "name": "keyword.operator.range.promise"
+        },
+        {
+          "comment": "Variadic / exclusive range",
+          "match": "\\.\\.\\.|\\.\\.",
+          "name": "keyword.operator.range.promise"
+        },
+        {
+          "comment": "Optional chaining",
+          "match": "\\?\\.",
+          "name": "keyword.operator.optional-chain.promise"
+        },
+        {
+          "comment": "Elvis operator",
+          "match": "\\?:",
+          "name": "keyword.operator.elvis.promise"
+        },
+        {
+          "comment": "Walrus / short declaration",
+          "match": ":=",
+          "name": "keyword.operator.assignment.walrus.promise"
+        },
+        {
+          "comment": "Increment/decrement",
+          "match": "\\+\\+|--",
+          "name": "keyword.operator.increment.promise"
+        },
+        {
+          "comment": "Compound assignment operators",
+          "match": "\\+=|-=|\\*=|/=|%=",
+          "name": "keyword.operator.assignment.compound.promise"
+        },
+        {
+          "comment": "Comparison operators",
+          "match": "==|!=|<=|>=",
+          "name": "keyword.operator.comparison.promise"
+        },
+        {
+          "comment": "Shift operators",
+          "match": "<<|>>",
+          "name": "keyword.operator.bitwise.shift.promise"
+        },
+        {
+          "comment": "Logical operators",
+          "match": "&&|\\|\\|",
+          "name": "keyword.operator.logical.promise"
+        },
+        {
+          "comment": "Forced cast as!",
+          "match": "\\b(as)\\s*(!)",
+          "captures": {
+            "1": { "name": "keyword.other.promise" },
+            "2": { "name": "keyword.operator.force.promise" }
+          }
+        },
+        {
+          "comment": "Single-char comparison",
+          "match": "[<>]",
+          "name": "keyword.operator.comparison.promise"
+        },
+        {
+          "comment": "Assignment",
+          "match": "=",
+          "name": "keyword.operator.assignment.promise"
+        },
+        {
+          "comment": "Arithmetic operators",
+          "match": "[+\\-*/%]",
+          "name": "keyword.operator.arithmetic.promise"
+        },
+        {
+          "comment": "Logical not / failable unwrap / force unwrap",
+          "match": "!",
+          "name": "keyword.operator.logical.promise"
+        },
+        {
+          "comment": "Bitwise operators",
+          "match": "[&|^~]",
+          "name": "keyword.operator.bitwise.promise"
+        },
+        {
+          "comment": "Error handler / optional",
+          "match": "\\?",
+          "name": "keyword.operator.optional.promise"
+        }
+      ]
+    },
+
+    "function-call": {
+      "comment": "Function or method call: name(...) or name[T](...)",
+      "match": "\\b([a-z_][a-zA-Z0-9_]*)\\s*(?=\\[[^\\]]*\\]\\s*\\(|\\()",
+      "captures": {
+        "1": { "name": "entity.name.function.call.promise" }
+      }
+    },
+
+    "enum-variant-ref": {
+      "comment": "Enum variant reference: Type.Variant",
+      "match": "\\b([A-Z][a-zA-Z0-9_]*)\\s*\\.\\s*([A-Z][a-zA-Z0-9_]*)\\b",
+      "captures": {
+        "1": { "name": "entity.name.type.promise" },
+        "2": { "name": "variable.other.enummember.promise" }
+      }
+    },
+
+    "identifiers": {
+      "patterns": [
+        {
+          "comment": "Underscore wildcard",
+          "match": "\\b_\\b",
+          "name": "variable.language.wildcard.promise"
+        },
+        {
+          "comment": "General identifiers",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b",
+          "name": "variable.other.promise"
+        }
+      ]
+    },
+
+    "punctuation": {
+      "patterns": [
+        { "match": ";", "name": "punctuation.terminator.promise" },
+        { "match": ",", "name": "punctuation.separator.promise" },
+        { "match": "\\.", "name": "punctuation.accessor.promise" },
+        { "match": ":", "name": "punctuation.separator.colon.promise" }
+      ]
+    }
+  }
+}
