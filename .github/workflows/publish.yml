@@ -31,6 +31,8 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
       - name: Publish to Open VSX
-        run: npx ovsx publish --pat "$OVSX_PAT"
+        run: |
+          npx ovsx create-namespace promise-lang --pat "$OVSX_PAT" || true
+          npx ovsx publish --pat "$OVSX_PAT"
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
