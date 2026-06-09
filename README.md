@@ -1,11 +1,18 @@
 # Promise Language — VS Code Extension
 
-VS Code extension providing language support for the [Promise programming language](https://github.com/promise-language/promise) — a statically-typed systems language with Dart-inspired syntax and Rust-inspired ownership semantics.
+VS Code extension for the [Promise programming language](https://github.com/promise-language/promise) — a statically-typed, natively-compiled language designed for AI agents to write correct, maintainable, efficient code: explicit ownership, algebraic errors, zero hidden effects, and one obvious way to do each thing.
+
+Every editor integration drives the single `promise` tool — the one binary that
+is the compiler, formatter, build system, test runner, and package manager. The
+extension installs and updates it for you, so there's nothing to set up by hand.
 
 ## Features
 
 - **Syntax Highlighting** — TextMate grammar for `.pr` files covering keywords, types, operators, string interpolation, backtick annotations, and comments
 - **Snippets** — Common patterns: type declarations, error handling, test functions, generators, match blocks
+- **Formatting** — Format on save (enabled by default for `.pr` files) and manual formatting via `promise format`
+- **Build & Test Tasks** — `promise build`, `promise run`, `promise check`, and `promise test` as VS Code tasks, with a problem matcher that routes compiler errors into the Problems panel
+- **Automatic Toolchain Management** — Installs the `promise` toolchain on first use and keeps it current — update channels (`stable`/`next`), side-by-side epochs, and notify-or-auto updates (see [Toolchain Commands & Settings](#toolchain-commands--settings))
 - **Bracket Matching & Auto-closing** — Pairs for `{}`, `[]`, `()`, backtick annotations
 - **Comment Toggling** — Line (`//`) and block (`/* */`) comments
 - **Code Folding** — Region-based folding for type bodies, function bodies, match arms
@@ -13,15 +20,45 @@ VS Code extension providing language support for the [Promise programming langua
 
 ## Planned Features
 
-- **Language Server Protocol (LSP)** — Diagnostics, completions, hover info, go-to-definition (via `promise` compiler)
-- **Formatting** — Integration with `promise format`
-- **Test Runner** — Run/debug tests via `promise test` from the editor
-- **Build Tasks** — `promise build`, `promise run`, `promise check` as VS Code tasks
+- **Language Server Protocol (LSP)** — Diagnostics, completions, hover info, go-to-definition (via the `promise` binary)
 
 ## Requirements
 
 - VS Code 1.85.0 or later
-- The `promise` compiler binary on your PATH (for LSP and formatting features)
+- The `promise` toolchain — the extension installs and updates it for you (no PATH setup required). To use an existing install instead, set `promise.compilerPath`.
+
+## Toolchain Commands & Settings
+
+The extension manages the `promise` toolchain — the single binary that is the
+compiler, formatter, build system, test runner, and package manager. When it
+can't find `promise`, it offers to install it; afterwards it checks for updates
+(daily on `next`, weekly on `stable`) and applies them on your say-so. It always
+runs the launcher stub at `~/.promise/bin/promise`, which dispatches to the epoch
+pinned by the workspace's `promise.toml`.
+
+### Commands
+
+Run from the Command Palette (⇧⌘P / Ctrl+Shift+P):
+
+| Command | Action |
+|---------|--------|
+| **Promise: Install Promise** | Download and install the toolchain (`<binary> install`) |
+| **Promise: Check for Updates** | Report whether a newer epoch is available (`promise update check`) |
+| **Promise: Update Promise** | Update to the channel's latest (`promise update`) |
+| **Promise: Switch Update Channel** | Choose `stable` or `next` (`promise update channel`) |
+| **Promise: Activate Epoch** | Switch the active epoch, downloading on demand (`promise use`) |
+
+### Settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `promise.compilerPath` | `promise` | Path to the `promise` binary. Defaults to the `~/.promise/bin/promise` stub, then `promise` on PATH. Respects `PROMISE_HOME`. |
+| `promise.channel` | `stable` | Update channel: `stable` (side-by-side epochs, checked weekly) or `next` (bleeding edge, in place, checked daily). |
+| `promise.autoUpdate` | `notify` | `off`, `notify` (prompt, never mutate silently), or `auto` (update automatically). |
+| `promise.variant` | `full` | `full` (self-contained download) or `thin` (fetches blobs on first use). |
+| `promise.releaseRepo` | `promise-language/promise` | GitHub `owner/repo` to download releases from. Honors `GITHUB_TOKEN`. |
+| `promise.testTimeout` | `60s` | Timeout for test tasks. |
+| `promise.testParallelism` | `0` | Parallel tests (`0` = number of CPUs). |
 
 ## File Associations
 
@@ -33,7 +70,11 @@ VS Code extension providing language support for the [Promise programming langua
 
 ### Option 1: Extension Development Host (recommended during development)
 
-1. Open the `promise_vscode/` folder in VS Code
+1. Clone the repository and open it in VS Code:
+   ```bash
+   git clone https://github.com/promise-language/vscode-promise
+   code vscode-promise
+   ```
 2. Run `npm install && npm run compile`
 3. Press **F5** — this launches a new VS Code window with the extension loaded
 4. Open any `.pr` file in that window to test highlighting, snippets, etc.
@@ -43,10 +84,10 @@ VS Code extension providing language support for the [Promise programming langua
 ```bash
 # Build the VSIX package
 npm install && npm run compile
-npx vsce package       # produces promise-language-0.1.0.vsix
+npx vsce package       # produces promise-language-<version>.vsix
 
 # Install it
-code --install-extension promise-language-0.1.0.vsix
+code --install-extension promise-language-<version>.vsix
 ```
 
 To uninstall: `code --uninstall-extension promise-language`
@@ -122,7 +163,7 @@ npm run compile
 # Watch for changes
 npm run watch
 
-# Run grammar tests
+# Run grammar + unit tests
 npm test
 
 # Package the extension
@@ -131,10 +172,12 @@ npx vsce package
 
 ## Testing
 
-Grammar tests use [`vscode-tmgrammar-test`](https://github.com/PanAeon/vscode-tmgrammar-test) to verify that Promise code gets the correct TextMate scopes. Test files live in `tests/grammar/` and use annotated `.pr.test` files.
+Grammar tests use [`vscode-tmgrammar-test`](https://github.com/PanAeon/vscode-tmgrammar-test) to verify that Promise code gets the correct TextMate scopes. Test files live in `tests/grammar/` and use annotated `.pr.test` files. Unit tests in `tests/unit/` (Node's built-in test runner) cover the pure logic in `src/utils.ts` and `src/release.ts`.
 
 ```bash
-npm test    # runs all 12 grammar test suites
+npm test            # grammar + unit tests
+npm run test:grammar
+npm run test:unit
 ```
 
 Each test file covers a specific area of the grammar:
@@ -167,31 +210,26 @@ type Foo {
 ## Extension Structure
 
 ```
-promise_vscode/
+vscode-promise/
 ├── package.json                   # Extension manifest
 ├── tsconfig.json                  # TypeScript configuration
 ├── src/
-│   └── extension.ts               # Extension entry point
+│   ├── extension.ts               # Activation entry point
+│   ├── compiler.ts                # Launcher-stub resolution
+│   ├── installer.ts               # Toolchain install/update orchestration
+│   ├── release.ts                 # Pure install/update helpers (unit-tested)
+│   ├── formatting.ts              # promise format integration
+│   ├── tasks.ts                   # build/run/check/test tasks
+│   └── utils.ts                   # Shared pure helpers (unit-tested)
 ├── syntaxes/
 │   └── promise.tmLanguage.json    # TextMate grammar
 ├── language-configuration.json    # Brackets, comments, folding
 ├── snippets/
 │   └── promise.json               # Code snippets
 ├── tests/
-│   └── grammar/                   # Grammar test suites (12 files)
-│       ├── declarations.pr.test
-│       ├── annotations.pr.test
-│       ├── keywords.pr.test
-│       ├── types.pr.test
-│       ├── strings.pr.test
-│       ├── numerics.pr.test
-│       ├── operators.pr.test
-│       ├── lambdas.pr.test
-│       ├── type_members.pr.test
-│       ├── parameters.pr.test
-│       ├── comments.pr.test
-│       └── use_binding.pr.test
-├── icons/                         # File icons (light/dark)
+│   ├── grammar/                   # Grammar test suites (12 .pr.test files)
+│   └── unit/                      # Unit tests for utils.ts / release.ts
+├── icons/                         # File + extension icons
 ├── docs/
 │   └── plan.md                    # Implementation plan
 ├── CLAUDE.md                      # AI agent guidance

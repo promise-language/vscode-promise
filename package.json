@@ -75,8 +75,8 @@
         ],
         "configuration": "./language-configuration.json",
         "icon": {
-          "light": "./icons/promise-light.svg",
-          "dark": "./icons/promise-dark.svg"
+          "light": "./icons/promise-icon.svg",
+          "dark": "./icons/promise-icon.svg"
         }
       }
     ],
