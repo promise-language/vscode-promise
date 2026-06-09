@@ -31,10 +31,38 @@
     "ownership"
   ],
   "activationEvents": [
-    "onLanguage:promise"
+    "onLanguage:promise",
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "promise.install",
+        "title": "Install Promise",
+        "category": "Promise"
+      },
+      {
+        "command": "promise.checkForUpdates",
+        "title": "Check for Updates",
+        "category": "Promise"
+      },
+      {
+        "command": "promise.update",
+        "title": "Update Promise",
+        "category": "Promise"
+      },
+      {
+        "command": "promise.selectChannel",
+        "title": "Switch Update Channel",
+        "category": "Promise"
+      },
+      {
+        "command": "promise.useEpoch",
+        "title": "Activate Epoch",
+        "category": "Promise"
+      }
+    ],
     "languages": [
       {
         "id": "promise",
@@ -71,7 +99,53 @@
         "promise.compilerPath": {
           "type": "string",
           "default": "promise",
-          "markdownDescription": "Path to the `promise` compiler binary. When left as default, the extension looks for the compiler at `~/.promise/bin/promise` (or an epoch-specific binary like `promise-2026.3` if `promise.toml` specifies an epoch), then falls back to `promise` on PATH. Respects the `PROMISE_HOME` environment variable."
+          "markdownDescription": "Path to the `promise` binary (the Promise toolchain: compiler, package manager, build system, and more). When left as default, the extension uses the launcher stub at `~/.promise/bin/promise` (which dispatches to the epoch pinned in `promise.toml`), then falls back to `promise` on PATH. Respects the `PROMISE_HOME` environment variable."
+        },
+        "promise.channel": {
+          "type": "string",
+          "enum": [
+            "stable",
+            "next"
+          ],
+          "enumDescriptions": [
+            "Stable epochs, installed side-by-side. Checked weekly.",
+            "Bleeding edge, updated in place. Checked daily."
+          ],
+          "default": "stable",
+          "markdownDescription": "Update channel used when bootstrapping the Promise compiler. After install, the channel is owned by the `promise` CLI (`promise update channel`) and reflected by update checks."
+        },
+        "promise.autoUpdate": {
+          "type": "string",
+          "enum": [
+            "off",
+            "notify",
+            "auto"
+          ],
+          "enumDescriptions": [
+            "Never check for updates automatically.",
+            "Periodically prompt to check for updates, but never download without consent.",
+            "Periodically download and apply updates automatically."
+          ],
+          "default": "notify",
+          "markdownDescription": "How the extension handles Promise toolchain updates. Checks run daily on the `next` channel and weekly on `stable`."
+        },
+        "promise.variant": {
+          "type": "string",
+          "enum": [
+            "full",
+            "thin"
+          ],
+          "enumDescriptions": [
+            "Self-contained download with host toolchain blobs pre-staged (no network on first use).",
+            "Smaller download that fetches toolchain blobs on first use."
+          ],
+          "default": "full",
+          "markdownDescription": "Prebuild variant to download when installing Promise."
+        },
+        "promise.releaseRepo": {
+          "type": "string",
+          "default": "promise-language/promise",
+          "markdownDescription": "GitHub `owner/repo` to download Promise releases from. Honors the `GITHUB_TOKEN` environment variable for authenticated requests."
         },
         "promise.testTimeout": {
           "type": "string",

@@ -152,13 +152,23 @@ Defines syntax highlighting scopes. Key areas:
 Common code patterns with tab stops for rapid coding.
 
 ### Compiler Resolution (`src/compiler.ts`)
-Resolves the `promise` binary with epoch-aware side-by-side version support. Resolution order:
+Resolves the `promise` **launcher stub**. Resolution order:
 1. User-configured `promise.compilerPath` (if explicitly set in settings)
-2. Epoch-specific binary at `~/.promise/bin/promise-{epoch}` (reads epoch from workspace `promise.toml`)
-3. Default binary at `~/.promise/bin/promise`
-4. `promise` on PATH
+2. Launcher stub at `~/.promise/bin/promise` (`promise.exe` on Windows)
+3. `promise` on PATH
 
-Respects `PROMISE_HOME` env var (mirrors the compiler's own resolution in `compiler/internal/module/home.go`).
+The extension always launches the stub — never an epoch-specific binary directly. The stub reads the workspace `promise.toml` and dispatches to the pinned epoch's compiler under `~/.promise/epochs/{epoch}/bin/promise`. Respects `PROMISE_HOME` env var (mirrors the compiler's own resolution in `compiler/internal/module/home.go`).
+
+On-disk layout under `~/.promise` (or `$PROMISE_HOME`): `bin/promise` (stub) + `active` (default epoch) + `epochs/{epoch}/bin/promise` (real per-epoch compiler) + `cache/blobs/` (shared content-addressed store).
+
+### Compiler Install & Update (`src/installer.ts`, `src/release.ts`)
+The release `promise` binary is self-contained and serves as its own installer. `src/installer.ts` (vscode-bound orchestration) downloads the **full** prebuild for the active channel, verifies its `SHA256SUMS` entry, gunzips it, and runs `<binary> install` to unpack it into the home layout. `src/release.ts` holds the pure, unit-tested helpers (asset-name mapping, GitHub release selection, `SHA256SUMS` parsing, epoch comparison, PATH detection) and the `SUBCOMMANDS` map.
+
+- **Channels** (`promise.channel`): `stable` (side-by-side epochs, checked weekly) and `next` (bleeding edge, updated in place, checked daily). Names match the CLI (`promise update channel <stable|next>`). The setting seeds the bootstrap install; after install the channel is owned by the CLI and reported by `promise update check --json`. Releases come from GitHub (`promise.releaseRepo`, default `promise-language/promise`), honoring `GITHUB_TOKEN`.
+- **Variants** (`promise.variant`): `full` (default, self-contained) or `thin` (fetches blobs on first use). `all` is not shipped yet.
+- **Commands**: `promise.install` (bootstrap download + `<binary> install`), `promise.checkForUpdates` (`promise update check --json`, parsed → notify), `promise.update` (`promise update`), `promise.selectChannel` (`promise update channel <stable|next>`), `promise.useEpoch` (`promise use <epoch>` — activates a specific epoch, downloading on demand; a later `promise update` re-activates the channel's latest). The CLI arg vectors live in `SUBCOMMANDS`/`channelArgs`/`useEpochArgs` in `release.ts`. Mutating commands run in a terminal for live output; the check runs headless and its JSON is parsed by `parseUpdateCheck`.
+- **Auto-update** (`promise.autoUpdate`): `off` / `notify` (default — parses the JSON check and prompts, never mutates silently) / `auto` (runs `promise update` when an update is available). The periodic check is a no-op until a compiler is installed.
+- **PATH**: on first install the extension offers (never forces) to add `~/.promise/bin` to PATH — appending to the shell profile on macOS/Linux or the User `Path` env var on Windows.
 
 ### Document Formatting (`src/formatting.ts`)
 Pipes document content to `promise format` via stdin. The formatter reads from stdin when invoked with no file arguments and writes formatted output to stdout. Format-on-save is handled by VS Code's native `editor.formatOnSave` mechanism — the extension sets this to `true` for Promise files by default via `configurationDefaults`. Users can disable it with `"[promise]": { "editor.formatOnSave": false }`. Errors are logged to the "Promise" output channel.

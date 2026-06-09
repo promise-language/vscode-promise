@@ -50,24 +50,23 @@ export function fileExists(filePath: string): boolean {
 }
 
 /**
- * Looks for the promise compiler binary in the given home directory.
- * Returns the path to the binary if found, null otherwise.
+ * Looks for the promise launcher stub in the given home directory.
+ * Returns the path to the stub if found, null otherwise.
  *
- * Resolution: epoch-specific binary first, then default binary.
+ * The extension always launches the stub at `<home>/bin/promise` (or
+ * `promise.exe` on Windows) — never an epoch-specific binary directly. The stub
+ * reads the workspace `promise.toml` and dispatches to the matching epoch's
+ * compiler under `<home>/epochs/<epoch>/bin/promise`.
  */
-export function findCompilerInHome(promiseHome: string, epoch: string | null): string | null {
+export function findCompilerInHome(promiseHome: string): string | null {
 	const binDir = path.join(promiseHome, 'bin');
+	const candidates = process.platform === 'win32' ? ['promise.exe', 'promise'] : ['promise'];
 
-	if (epoch) {
-		const epochBinary = path.join(binDir, `promise-${epoch}`);
-		if (fileExists(epochBinary)) {
-			return epochBinary;
+	for (const name of candidates) {
+		const candidate = path.join(binDir, name);
+		if (fileExists(candidate)) {
+			return candidate;
 		}
-	}
-
-	const defaultBinary = path.join(binDir, 'promise');
-	if (fileExists(defaultBinary)) {
-		return defaultBinary;
 	}
 
 	return null;

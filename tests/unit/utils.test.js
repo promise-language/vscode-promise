@@ -194,37 +194,26 @@ describe('findCompilerInHome', () => {
 	it('returns null when bin dir is empty', () => {
 		const emptyHome = fs.mkdtempSync(path.join(os.tmpdir(), 'promise-empty-'));
 		fs.mkdirSync(path.join(emptyHome, 'bin'));
-		assert.equal(findCompilerInHome(emptyHome, null), null);
+		assert.equal(findCompilerInHome(emptyHome), null);
 		fs.rmSync(emptyHome, { recursive: true });
 	});
 
 	it('returns null when bin dir does not exist', () => {
 		const noHome = path.join(os.tmpdir(), 'promise-nobin-' + Date.now());
-		assert.equal(findCompilerInHome(noHome, null), null);
+		assert.equal(findCompilerInHome(noHome), null);
 	});
 
-	it('returns default binary when it exists and no epoch', () => {
+	it('returns the launcher stub when it exists', () => {
 		const binPath = path.join(tmpDir, 'bin', 'promise');
 		fs.writeFileSync(binPath, '#!/bin/sh\n');
-		assert.equal(findCompilerInHome(tmpDir, null), binPath);
+		assert.equal(findCompilerInHome(tmpDir), binPath);
 	});
 
-	it('returns default binary when epoch is given but epoch binary does not exist', () => {
-		const binPath = path.join(tmpDir, 'bin', 'promise');
-		// promise already exists from previous test
-		assert.equal(findCompilerInHome(tmpDir, '2099.1'), binPath);
-	});
-
-	it('returns epoch binary when it exists', () => {
-		const epochPath = path.join(tmpDir, 'bin', 'promise-2026.3');
-		fs.writeFileSync(epochPath, '#!/bin/sh\n');
-		assert.equal(findCompilerInHome(tmpDir, '2026.3'), epochPath);
-	});
-
-	it('prefers epoch binary over default', () => {
-		// Both promise and promise-2026.3 exist (from previous tests)
-		const result = findCompilerInHome(tmpDir, '2026.3');
-		assert.ok(result.endsWith('promise-2026.3'));
+	it('ignores epoch-specific binaries (stub is always used)', () => {
+		// An epoch-specific binary must never be resolved directly.
+		fs.writeFileSync(path.join(tmpDir, 'bin', 'promise-2026.3'), '#!/bin/sh\n');
+		const result = findCompilerInHome(tmpDir);
+		assert.ok(result.endsWith(path.join('bin', 'promise')));
 	});
 });
 
