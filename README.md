@@ -1,6 +1,6 @@
 # Promise Language — VS Code Extension
 
-VS Code extension for the [Promise programming language](https://github.com/promise-language/promise) — a statically-typed, natively-compiled language designed for AI agents to write correct, maintainable, efficient code: explicit ownership, algebraic errors, zero hidden effects, and one obvious way to do each thing.
+VS Code extension for the [Promise programming language](https://github.com/promise-language/promise) — a statically-typed, natively-compiled language.
 
 Every editor integration drives the single `promise` tool — the one binary that
 is the compiler, formatter, build system, test runner, and package manager. The
