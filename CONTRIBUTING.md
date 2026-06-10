@@ -6,6 +6,23 @@ Code. This guide covers building, testing, and submitting changes.
 For the language itself, see the [Promise
 repository](https://github.com/promise-language/promise).
 
+## Contributor License Agreement (CLA) required
+
+This extension is part of the **Promise Lang** project, hosted in the
+`promise-language` organization and maintained under Promise Lang LLC. Before
+any pull request can be merged, you must sign the **Promise Lang Contributor
+License Agreement**. When you open your first pull request, the CLA Assistant
+bot will post a link to sign. You only need to sign once — it covers all future
+contributions across the project.
+
+- **Individual contributors** sign the Individual CLA.
+- **Contributors acting on behalf of an employer** also have their employer sign
+  the Corporate CLA.
+
+You retain copyright in your contribution; the CLA grants Promise Lang LLC the
+rights it needs to administer, distribute, and sublicense it as part of the
+project.
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) 18+ and npm
@@ -49,6 +66,8 @@ scope. When you change `src/`, add or update a unit test where practical.
    code style.
 3. Ensure `npm run compile` and `npm test` both pass.
 4. Open a pull request describing what changed and why.
+5. Sign the CLA when the bot prompts you (see above) — it is a required check
+   before merge.
 
 ## License of contributions
 
