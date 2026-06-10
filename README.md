@@ -6,6 +6,18 @@ Every editor integration drives the single `promise` tool — the one binary tha
 is the compiler, formatter, build system, test runner, and package manager. The
 extension installs and updates it for you, so there's nothing to set up by hand.
 
+> **🚧 Launching soon.** The Promise language and its toolchain are not public
+> yet. Until the [Promise repository](https://github.com/promise-language/promise)
+> goes live and ships its first release, **automatic toolchain installation will
+> fail — this is expected**, not a bug in the extension. Editor features that
+> don't need the compiler (syntax highlighting, snippets, bracket matching,
+> comment toggling, folding, file icons) work today; build, format, test, and
+> update commands will start working the moment the toolchain is available.
+>
+> **Want early access?** Email [early@promise-lang.org](mailto:early@promise-lang.org)
+> to request early access or to be notified the moment the language repository
+> goes public.
+
 ## Features
 
 - **Syntax Highlighting** — TextMate grammar for `.pr` files covering keywords, types, operators, string interpolation, backtick annotations, and comments
