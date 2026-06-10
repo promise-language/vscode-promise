@@ -38,10 +38,10 @@ describe('problem matcher regex', () => {
 		});
 
 		it('error with absolute path', () => {
-			const line = '/Users/djabi/prog/project/src/main.pr:42:15: type mismatch';
+			const line = '/home/user/prog/project/src/main.pr:42:15: type mismatch';
 			const m = line.match(pattern);
 			assert.ok(m);
-			assert.equal(m[1], '/Users/djabi/prog/project/src/main.pr');
+			assert.equal(m[1], '/home/user/prog/project/src/main.pr');
 			assert.equal(m[2], '42');
 			assert.equal(m[3], '15');
 			assert.equal(m[4], 'type mismatch');

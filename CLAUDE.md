@@ -4,9 +4,9 @@ This file provides guidance to Claude Code when working with code in this reposi
 
 ## Project Overview
 
-This is a VS Code extension for the **Promise programming language**. Promise is a statically-typed systems language with Dart-inspired syntax, Rust-inspired ownership semantics, ANTLR4-based parsing, and LLVM IR codegen. The compiler is a single Go binary (`promise`). Source files use the `.pr` extension.
+VS Code extension for the **Promise programming language** — a statically-typed, natively-compiled language. Source files use the `.pr` extension.
 
-The companion compiler repo lives at `../promise_lang/`. Refer to `../promise_lang/docs/language-design.md` for the full language spec and `../promise_lang/docs/language-guide-for-agents.md` for a concise syntax reference.
+The compiler lives in a separate repository: https://github.com/promise-language/promise. For language details, see `docs/language-design.md` (full spec) and `docs/language-guide-for-agents.md` (concise syntax reference) there — or a local checkout at `../promise/` if available.
 
 ## Build, Test & Run
 
@@ -180,6 +180,6 @@ Provides build/run/check/test/clean tasks. The `$promise` problem matcher parses
 
 - Use the VS Code extension API — avoid shelling out where the API provides the functionality
 - TextMate grammar scopes should follow the [VS Code naming conventions](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide)
-- Test grammar changes against the example files in `../promise_lang/examples/` and `../promise_lang/tests/`
-- Keep the grammar aligned with the ANTLR4 grammar at `../promise_lang/compiler/grammar/PromiseLexer.g4` and `PromiseParser.g4`
+- Test grammar changes against the example files in the compiler repo's `examples/` and `tests/` directories (see the Project Overview for how to access that repo)
+- Keep the grammar aligned with the ANTLR4 grammar at `compiler/grammar/PromiseLexer.g4` and `PromiseParser.g4` in the compiler repo
 - When adding LSP features, the `promise` binary provides the backend — the extension is a thin client
