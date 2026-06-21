@@ -2,7 +2,7 @@
   "name": "promise-language",
   "displayName": "Promise Language",
   "description": "Language support for the Promise programming language",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "publisher": "promise-lang",
   "license": "(MIT OR Apache-2.0)",
   "repository": {
