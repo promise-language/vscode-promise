@@ -22,6 +22,18 @@ main() {
 //^^^ support.type.primitive.promise
   u64 i = 0;
 //^^^ support.type.primitive.promise
+  i128 l = 0;
+//^^^^ support.type.primitive.promise
+  u128 m = 0;
+//^^^^ support.type.primitive.promise
+  i256 n = 0;
+//^^^^ support.type.primitive.promise
+  u256 o = 0;
+//^^^^ support.type.primitive.promise
+  i512 p = 0;
+//^^^^ support.type.primitive.promise
+  u512 q = 0;
+//^^^^ support.type.primitive.promise
   f32 j = 0.0;
 //^^^ support.type.primitive.promise
   f64 k = 0.0;

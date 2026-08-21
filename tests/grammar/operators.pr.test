@@ -74,6 +74,28 @@ test_operators() {
 //  ^ keyword.operator.bitwise.promise
   x ^ y;
 //  ^ keyword.operator.bitwise.promise
+  x | y;
+//  ^ keyword.operator.bitwise.promise
+//    ^ variable.other.promise
+
+// --- Binary OR must not start a lambda and swallow what follows ---
+  int a = x | y;
+//          ^ keyword.operator.bitwise.promise
+  return a;
+//^^^^^^ keyword.control.promise
+  d = (d << 32u256) | (this.h1 as! u256);
+//                  ^ keyword.operator.bitwise.promise
+//                     ^^^^ variable.language.this.promise
+//                             ^^ keyword.other.promise
+//                               ^ keyword.operator.force.promise
+//                                 ^^^^ support.type.primitive.promise
+
+// --- Chained OR: two pipes on one line are still operators ---
+  flags = READ | WRITE | EXEC;
+//             ^ keyword.operator.bitwise.promise
+//                     ^ keyword.operator.bitwise.promise
+  return flags;
+//^^^^^^ keyword.control.promise
 
 // --- Arrow ---
   f := |int x| -> x;

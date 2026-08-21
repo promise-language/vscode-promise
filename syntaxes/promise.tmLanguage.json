@@ -470,7 +470,7 @@
       "patterns": [
         {
           "comment": "Primitive types",
-          "match": "\\b(int|i8|i16|i32|i64|uint|u8|u16|u32|u64|f32|f64|bool|char|string|void|error)\\b",
+          "match": "\\b(int|i8|i16|i32|i64|i128|i256|i512|uint|u8|u16|u32|u64|u128|u256|u512|f32|f64|bool|char|string|void|error)\\b",
           "name": "support.type.primitive.promise"
         },
         {
@@ -682,22 +682,22 @@
         },
         {
           "comment": "Hex integer",
-          "match": "\\b0x[0-9a-fA-F][0-9a-fA-F_]*(?:u8|u16|u32|u64|i8|i16|i32|i64|u)?\\b",
+          "match": "\\b0x[0-9a-fA-F][0-9a-fA-F_]*(?:i128|u128|i256|u256|i512|u512|i16|i32|i64|u16|u32|u64|i8|u8|i|u)?\\b",
           "name": "constant.numeric.hex.promise"
         },
         {
           "comment": "Octal integer",
-          "match": "\\b0o[0-7][0-7_]*(?:u8|u16|u32|u64|i8|i16|i32|i64|u)?\\b",
+          "match": "\\b0o[0-7][0-7_]*(?:i128|u128|i256|u256|i512|u512|i16|i32|i64|u16|u32|u64|i8|u8|i|u)?\\b",
           "name": "constant.numeric.octal.promise"
         },
         {
           "comment": "Binary integer",
-          "match": "\\b0b[01][01_]*(?:u8|u16|u32|u64|i8|i16|i32|i64|u)?\\b",
+          "match": "\\b0b[01][01_]*(?:i128|u128|i256|u256|i512|u512|i16|i32|i64|u16|u32|u64|i8|u8|i|u)?\\b",
           "name": "constant.numeric.binary.promise"
         },
         {
           "comment": "Decimal integer with suffix",
-          "match": "\\b[0-9][0-9_]*(?:u8|u16|u32|u64|i8|i16|i32|i64|u)\\b",
+          "match": "\\b[0-9][0-9_]*(?:i128|u128|i256|u256|i512|u512|i16|i32|i64|u16|u32|u64|i8|u8|i|u)\\b",
           "name": "constant.numeric.integer.promise"
         },
         {
@@ -744,12 +744,12 @@
           }
         },
         {
-          "comment": "Lambda with params: [move] |params| -> expr or { body }",
-          "begin": "(move\\s+)?(?<=[=:,(\\s])\\|(?!\\|)",
+          "comment": "Lambda with params: [move] |params| -> expr or { body }. The begin requires a closing | followed by -> or { on the same line, so binary bitwise OR (x | y) falls through to #operators; end also matches $ so a mis-detection can never leak past the line.",
+          "begin": "(move\\s+)?(?<=[=:,(\\s])\\|(?!\\|)(?=[^|]*\\|\\s*(?:->|\\{))",
           "beginCaptures": {
             "1": { "name": "keyword.other.move.promise" }
           },
-          "end": "\\|",
+          "end": "\\||$",
           "patterns": [
             { "include": "#annotations" },
             { "include": "#type-reference" },

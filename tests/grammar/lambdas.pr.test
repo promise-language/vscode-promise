@@ -19,4 +19,22 @@ test_lambdas() {
   h := move || -> 42;
 //     ^^^^ keyword.other.move.promise
 //          ^^ punctuation.definition.lambda.promise
+
+// --- Move lambda with params ---
+  k := move |int x| -> x;
+//     ^^^^ keyword.other.move.promise
+//               ^ variable.parameter.promise
+
+// --- Lambda with a block body ---
+  m := |int x| { return x; };
+//      ^^^ support.type.primitive.promise
+//          ^ variable.parameter.promise
+
+// --- A lambda still parses on a line that also contains a bitwise OR ---
+  n := |int x| -> x | 1;
+//      ^^^ support.type.primitive.promise
+//          ^ variable.parameter.promise
+//                  ^ keyword.operator.bitwise.promise
+  return n;
+//^^^^^^ keyword.control.promise
 }
