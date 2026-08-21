@@ -16,12 +16,22 @@ main() {
 //^^^^^^ constant.numeric.integer.promise
   255u;
 //^^^^ constant.numeric.integer.promise
+  7i;
+//^^ constant.numeric.integer.promise
+  32u256;
+//^^^^^^ constant.numeric.integer.promise
+  1u128;
+//^^^^^ constant.numeric.integer.promise
+  9i512;
+//^^^^^ constant.numeric.integer.promise
 
 // --- Hex ---
   0xFF;
 //^^^^ constant.numeric.hex.promise
   0xDEAD_BEEF;
 //^^^^^^^^^^^ constant.numeric.hex.promise
+  0xffu256;
+//^^^^^^^^ constant.numeric.hex.promise
 
 // --- Octal ---
   0o77;
