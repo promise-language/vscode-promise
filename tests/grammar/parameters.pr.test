@@ -41,3 +41,18 @@ swap(Foo ~a, Foo ~b) {
 //       ^ keyword.operator.borrow.promise
 //               ^ keyword.operator.borrow.promise
 }
+
+// --- Move parameters ---
+consume(string move name, map[string, Value] move entries) {
+//             ^^^^ keyword.other.move.promise
+//                  ^^^^ variable.parameter.promise
+//                                           ^^^^ keyword.other.move.promise
+//                                                ^^^^^^^ variable.parameter.promise
+}
+
+// --- Move in a lambda parameter list ---
+run() {
+  f := |string move s| -> s;
+//             ^^^^ keyword.other.move.promise
+//                  ^  variable.parameter.promise
+}

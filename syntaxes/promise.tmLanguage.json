@@ -398,6 +398,11 @@
           "match": "(\\.\\.\\.)",
           "name": "keyword.operator.variadic.promise"
         },
+        {
+          "comment": "Ownership transfer on a parameter: string move name",
+          "match": "\\b(move)\\b",
+          "name": "keyword.other.move.promise"
+        },
         { "include": "#annotations" },
         { "include": "#type-reference" },
         {
@@ -751,6 +756,11 @@
           },
           "end": "\\||$",
           "patterns": [
+            {
+              "comment": "Ownership transfer on a lambda parameter",
+              "match": "\\b(move)\\b",
+              "name": "keyword.other.move.promise"
+            },
             { "include": "#annotations" },
             { "include": "#type-reference" },
             {
